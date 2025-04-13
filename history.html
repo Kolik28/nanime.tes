@@ -181,8 +181,8 @@
         }
 
         async function fetchFilmDetails(filmId) {
-            const otakudesuEpisodeUrl = `http://localhost:3001/otakudesu/episode/${filmId}`;
-            const samehadakuEpisodeUrl = `http://localhost:3001/samehadaku/episode/${filmId}`;
+            const otakudesuEpisodeUrl = `https://wajik-anime-api.vercel.app/otakudesu/episode/${filmId}`;
+            const samehadakuEpisodeUrl = `https://wajik-anime-api.vercel.app/samehadaku/episode/${filmId}`;
 
             try {
                 const epRes = await fetch(otakudesuEpisodeUrl);
@@ -190,7 +190,7 @@
                     const episodeData = await epRes.json();
                     const imgId = episodeData.data.animeId;
 
-                    const imgEpisodeUrl = `http://localhost:3001/otakudesu/anime/${imgId}`;
+                    const imgEpisodeUrl = `https://wajik-anime-api.vercel.app/otakudesu/anime/${imgId}`;
                     const imgRes = await fetch(imgEpisodeUrl);
                     const animeData = await imgRes.json();
 

@@ -212,8 +212,8 @@
 
 
         function fetchGenres() {
-            const url1 = "http://localhost:3001/otakudesu/genres";
-            const url2 = "http://localhost:3001/samehadaku/genres";
+            const url1 = "https://wajik-anime-api.vercel.app/otakudesu/genres";
+            const url2 = "https://wajik-anime-api.vercel.app/samehadaku/genres";
 
             Promise.all([fetch(url1), fetch(url2)])
                 .then(responses => Promise.all(responses.map(res => res.json())))
@@ -257,8 +257,8 @@
 
 
         function fetchAnimeByGenre(genreId) {
-            const url1 = `http://localhost:3001/otakudesu/genres/${genreId}`;
-            const url2 = `http://localhost:3001/samehadaku/genres/${genreId}`;
+            const url1 = `https://wajik-anime-api.vercel.app/otakudesu/genres/${genreId}`;
+            const url2 = `https://wajik-anime-api.vercel.app/samehadaku/genres/${genreId}`;
 
             Promise.all([fetch(url1), fetch(url2)])
                 .then(responses => Promise.all(responses.map(res => res.json())))

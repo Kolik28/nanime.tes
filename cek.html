@@ -115,7 +115,7 @@
     let sameData, otakuData;
     
     try {
-      const sameRes = await fetch(`http://localhost:3001/samehadaku/anime/${slug}`);
+      const sameRes = await fetch(`https://wajik-anime-api.vercel.app/samehadaku/anime/${slug}`);
       if (!sameRes.ok) {
         throw new Error(`Samehadaku API returned ${sameRes.status}`);
       }
@@ -129,7 +129,7 @@
     }
     
     try {
-      const otakuRes = await fetch(`http://localhost:3001/otakudesu/anime/${slug}`);
+      const otakuRes = await fetch(`https://wajik-anime-api.vercel.app/otakudesu/anime/${slug}`);
       if (!otakuRes.ok) {
         throw new Error(`Otakudesu API returned ${otakuRes.status}`);
       }
@@ -192,7 +192,7 @@
       saveToHistory(id);
   
       try {
-        const res = await fetch(`http://localhost:3001/${source}/episode/${id}`);
+        const res = await fetch(`https://wajik-anime-api.vercel.app/${source}/episode/${id}`);
         const json = await res.json();
         const video = json.data;
   
