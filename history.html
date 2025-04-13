@@ -1,0 +1,225 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoNime</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            /* overflow: hidden; */
+        }
+
+        .header {
+            top: 0;
+            font-size: 40px;
+            font-weight: bold;
+            margin-top: 10;
+            display: inline-flex;
+        }
+
+        .header span {
+            color: #FF3D3D;
+            filter: drop-shadow(0 0 1.1rem red);
+        }
+
+        .footer {
+            bottom: 0;
+            position: fixed;
+            width: 100%;
+            background-color: #333;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+
+        .footer button {
+            background-color: #333;
+            border: none;
+        }
+
+        .footer i {
+            color: white;
+            font-size: 35px;
+        }
+
+        .section-title {
+            font-size: 17px;
+            margin: 15px 0;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .grid::-webkit-scrollbar {
+            width: 0;
+            background: transparent;
+        }
+
+        .grid {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .grid {
+            display: block;
+            padding: 0 20px;
+            margin-bottom: 40px;
+            position: relative;
+            height: calc(75%);
+            overflow-y: auto;
+        }
+
+        .row {
+            display: flex;
+            margin: 1rem 0;
+        }
+
+        a {
+            color: white;
+            text-decoration: none;
+        }
+
+        .title {
+            margin-left: 1rem;
+        }
+
+        .grid::-webkit-scrollbar {
+            width: 0;
+            background: transparent;
+        }
+
+        .grid {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <span>NODELIK</span>
+    </div>
+    <div class="section-title">History</div>
+    <div class="grid" id="historyGrid">
+    </div>
+    <div class="footer">
+        <button>
+            <a href="index.html">
+                <i class="fas fa-home"></i>
+            </a>
+        </button>
+        <button>
+            <a href="movie.html">
+                <i class="fas fa-film"></i>
+            </a>
+        </button>
+        <button>
+            <a href="anime.html">
+                <i class="fas fa-images"></i>
+            </a>
+        </button>
+        <button>
+            <a href="genre.html">
+                <i class="fas fa-file-video"></i>
+            </a>
+        </button>
+        <button>
+            <a href="history.html">
+                <i class="fas fa-history" style="color: red;"></i>
+            </a>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            displayHistory();
+        });
+
+        function displayHistory() {
+            const history = JSON.parse(localStorage.getItem('history_film')) || [];
+            const historyGrid = document.getElementById('historyGrid');
+            historyGrid.innerHTML = '';
+
+            const sortedHistory = history.sort((a, b) => b.timestamp - a.timestamp);
+
+            if (sortedHistory.length === 0) {
+                historyGrid.innerHTML = '<p>Riwayat film kosong.</p>';
+                return;
+            }
+
+            sortedHistory.forEach(item => {
+                fetchFilmDetails(item.film_id)
+                    .then(video => {
+                        if (!video) {
+                            const errorMsg = document.createElement('p');
+                            errorMsg.textContent = `Gagal mengambil data ID: ${item.film_id}`;
+                            historyGrid.appendChild(errorMsg);
+                            return;
+                        }
+
+                        const row = document.createElement('a');
+                        row.href = `cek.html?s=${video.animeId}`;
+                        row.className = "history-item block mb-4";
+                        row.innerHTML = `
+                            <div class="row flex items-center space-x-4">
+                                <img height="150" width="100" src="${video.poster}" class="rounded shadow">
+                                <div class="title">
+                                    <h3 class="font-bold text-lg">${video.title}</h3>
+                                </div>
+                            </div>
+                        `;
+                        historyGrid.appendChild(row);
+                    });
+            });
+        }
+
+        async function fetchFilmDetails(filmId) {
+            const otakudesuEpisodeUrl = `http://localhost:3001/otakudesu/episode/${filmId}`;
+            const samehadakuEpisodeUrl = `http://localhost:3001/samehadaku/episode/${filmId}`;
+
+            try {
+                const epRes = await fetch(otakudesuEpisodeUrl);
+                if (epRes.ok) {
+                    const episodeData = await epRes.json();
+                    const imgId = episodeData.data.animeId;
+
+                    const imgEpisodeUrl = `http://localhost:3001/otakudesu/anime/${imgId}`;
+                    const imgRes = await fetch(imgEpisodeUrl);
+                    const animeData = await imgRes.json();
+
+                    if (episodeData?.data && animeData?.data) {
+                        return {
+                            ...episodeData.data,
+                            poster: animeData.data.poster
+                        };
+                    }
+                }
+            } catch (e) {
+                console.warn(`Gagal fetch dari Otakudesu: ${e}`);
+            }
+
+            try {
+                const res = await fetch(samehadakuEpisodeUrl);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data?.data) return data.data;
+                }
+            } catch (e) {
+                console.warn(`Gagal fetch dari Samehadaku: ${e}`);
+            }
+
+            return null;
+        }
+
+    </script>
+
+</body>
+
+</html>

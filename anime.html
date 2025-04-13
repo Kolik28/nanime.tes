@@ -1,0 +1,203 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NoNime</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: black;
+            color: white;
+            text-align: center;
+            font-weight: bold;
+            /* overflow: hidden; */
+        }
+
+        .header {
+            font-size: 40px;
+            font-weight: bold;
+            margin-top: 10;
+            display: inline-flex;
+        }
+
+        .header span {
+            color: #FF3D3D;
+            filter: drop-shadow(0 0 1.1rem red);
+        }
+
+        .footer {
+            bottom: 0;
+            position: fixed;
+            width: 100%;
+            background-color: #333;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+        }
+
+        .footer button {
+            background-color: #333;
+            border: none;
+        }
+
+        .footer i {
+            color: white;
+            font-size: 35px;
+        }
+
+        .container {
+            height: calc(80%);
+            overflow-y: auto;
+        }
+
+        .search-bar {
+            margin: 10px 0;
+        }
+
+        .search-bar input {
+            width: 80%;
+            height: 30px;
+            padding: 15px;
+            font-size: 20px;
+            border: 1px solid #555;
+            border-radius: 5px;
+            background-color: #000;
+            color: #fff;
+        }
+
+        .movie-grid {
+            padding: 0 20px;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .item-name {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 1.5rem 0;
+            color: red;
+        }
+
+        .movie-item {
+            display: block;
+            border-bottom: 1px solid gray;
+        }
+
+        .movie-item .item-row {
+            color: white;
+            text-decoration: none;
+        }
+
+        .movie-grid::-webkit-scrollbar {
+            width: 0;
+            background: transparent;
+        }
+
+        .movie-grid {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        <span>NODELIK</span>
+    </div>
+    <div class="search-bar">
+        <input type="text" id="searchInput" onkeyup="searchMovies()" placeholder="Search...">
+    </div>
+    <div class="container">
+        <div class="movie-grid" id="movieGrid">
+        </div>
+    </div>
+    <div class="footer">
+        <button>
+            <a href="index.html">
+                <i class="fas fa-home"></i>
+            </a>
+        </button>
+        <button>
+            <a href="movie.html">
+                <i class="fas fa-film"></i>
+            </a>
+        </button>
+        <button>
+            <a href="anime.html">
+                <i class="fas fa-images" style="color: red;"></i>
+            </a>
+        </button>
+        <button>
+            <a href="genre.html">
+                <i class="fas fa-file-video"></i>
+            </a>
+        </button>
+        <button>
+            <a href="history.html">
+                <i class="fas fa-history"></i>
+            </a>
+        </button>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetchAnimeList();
+        });
+
+        function fetchAnimeList() {
+            const url1 = "https://wajik-anime-api.vercel.app/otakudesu/anime";
+            const url2 = "https://wajik-anime-api.vercel.app/samehadaku/anime";
+
+            Promise.all([fetch(url1), fetch(url2)])
+                .then(responses => Promise.all(responses.map(res => res.json())))
+                .then(([data1, data2]) => {
+                    const list1 = data1.data.list.flatMap(group => group.animeList);
+                    const list2 = data2.data.list.flatMap(group => group.animeList);
+
+                    const combined = [...list1, ...list2];
+                    const uniqueMap = new Map();
+
+                    combined.forEach(item => {
+                        if (!uniqueMap.has(item.animeId)) {
+                            uniqueMap.set(item.animeId, item);
+                        }
+                    });
+
+                    const movieGrid = document.getElementById('movieGrid');
+                    movieGrid.innerHTML = '';
+
+                    for (let item of uniqueMap.values()) {
+                        const movieItem = document.createElement('div');
+                        movieItem.className = 'movie-item';
+                        movieItem.innerHTML = `
+          <a class="item-row" href="cek.html?s=${item.animeId}">
+              <h3>${item.title}</h3>
+          </a>
+        `;
+                        movieGrid.appendChild(movieItem);
+                    }
+                })
+                .catch(error => console.error('Error fetching anime list:', error));
+        }
+
+
+        function searchMovies() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const movieItems = document.getElementsByClassName('movie-item');
+
+            for (let i = 0; i < movieItems.length; i++) {
+                const title = movieItems[i].getElementsByClassName('item-row')[0].getElementsByTagName('h3')[0].innerText.toLowerCase();
+                if (title.includes(input)) {
+                    movieItems[i].style.display = '';
+                } else {
+                    movieItems[i].style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+
+</html>
