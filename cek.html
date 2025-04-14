@@ -129,7 +129,7 @@
     }
     
     try {
-      const otakuRes = await fetch(`hthttps://anime.nodelik.xyz/otakudesu/anime/${slug}`);
+      const otakuRes = await fetch(`https://anime.nodelik.xyz/otakudesu/anime/${slug}`);
       if (!otakuRes.ok) {
         throw new Error(`Otakudesu API returned ${otakuRes.status}`);
       }
