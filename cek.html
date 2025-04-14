@@ -129,7 +129,7 @@
     }
     
     try {
-      const otakuRes = await fetch(`https://wajik-anime-api-production-28be.up.railway.app/otakudesu/anime/${slug}`);
+      const otakuRes = await fetch(`hthttps://anime.nodelik.xyz/otakudesu/anime/${slug}`);
       if (!otakuRes.ok) {
         throw new Error(`Otakudesu API returned ${otakuRes.status}`);
       }
@@ -192,7 +192,7 @@
       saveToHistory(id);
   
       try {
-        const res = await fetch(`https://wajik-anime-api-production-28be.up.railway.app/${source}/episode/${id}`);
+        const res = await fetch(`https://anime.nodelik.xyz/${source}/episode/${id}`);
         const json = await res.json();
         const video = json.data;
   
@@ -213,7 +213,7 @@
             btn.textContent = srv.title;
             btn.onclick = async () => {
               try {
-                const res = await fetch(`https://wajik-anime-api-production-28be.up.railway.app/${source}/server/${srv.serverId}`);
+                const res = await fetch(`https://anime.nodelik.xyz/${source}/server/${srv.serverId}`);
                 const json = await res.json();
                 videoPlayer.src = json.data.url;
               } catch (err) {
