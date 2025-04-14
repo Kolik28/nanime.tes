@@ -155,7 +155,7 @@
               <p>Rating: <i class="fas fa-star text-yellow-400"></i> ${sameData.score?.value || otakuData.score?.value}</p>
               <p>Status: ${sameData.status || otakuData.status}</p>
               <p>Genre: ${(sameData.genreList || otakuData.genreList).map(g => g.title).join(', ')}</p>
-              <p>${sameData.season || otakuData.season} ${sameData.aired || otakuData.aired}</p>
+              <p>${sameData.aired || otakuData.aired}</p>
             </div>
           </div>
         `;
