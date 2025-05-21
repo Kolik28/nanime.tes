@@ -148,8 +148,8 @@
         });
 
         function fetchAnimeList() {
-            const url1 = "https://wajik-anime-api.vercel.app/otakudesu/anime";
-            const url2 = "https://wajik-anime-api.vercel.app/samehadaku/anime";
+            const url1 = "https://anime.nodelik.xyz/otakudesu/anime";
+            const url2 = "https://anime.nodelik.xyz/samehadaku/anime";
 
             Promise.all([fetch(url1), fetch(url2)])
                 .then(responses => Promise.all(responses.map(res => res.json())))
