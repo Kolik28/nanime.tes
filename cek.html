@@ -115,7 +115,7 @@
     let sameData, otakuData;
     
     try {
-      const sameRes = await fetch(`https://wajik-anime-api-production-28be.up.railway.app/samehadaku/anime/${slug}`);
+      const sameRes = await fetch(`https://anime.nodelik.xyz/samehadaku/anime/${slug}`);
       if (!sameRes.ok) {
         throw new Error(`Samehadaku API returned ${sameRes.status}`);
       }
@@ -192,7 +192,7 @@
       saveToHistory(id);
   
       try {
-        const res = await fetch(`https://wajik-anime-api-production-28be.up.railway.app/${source}/episode/${id}`);
+        const res = await fetch(`https://anime.nodelik.xyz/${source}/episode/${id}`);
         const json = await res.json();
         const video = json.data;
   
