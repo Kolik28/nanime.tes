@@ -115,7 +115,7 @@
     let sameData, otakuData;
     
     try {
-      const sameRes = await fetch(`https://anime.nodelik.xyz/otakudesu/anime/${slug}`);
+      const sameRes = await fetch(`https://anime.nodelik.xyz/samehadaku/anime/${slug}`);
       if (!sameRes.ok) {
         throw new Error(`Samehadaku API returned ${sameRes.status}`);
       }
