@@ -257,8 +257,8 @@
 
 
         function fetchAnimeByGenre(genreId) {
-            const url1 = `https://wajik-anime-api.vercel.app/otakudesu/genres/${genreId}`;
-            const url2 = `https://wajik-anime-api.vercel.app/samehadaku/genres/${genreId}`;
+            const url1 = `https://anime.nodelik.xyz/otakudesu/genres/${genreId}`;
+            const url2 = `https://anime.nodelik.xyz/samehadaku/genres/${genreId}`;
 
             Promise.all([fetch(url1), fetch(url2)])
                 .then(responses => Promise.all(responses.map(res => res.json())))
